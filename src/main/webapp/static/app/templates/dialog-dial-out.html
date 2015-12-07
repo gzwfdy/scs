@@ -1,0 +1,38 @@
+<div class="overlay-container brand-overlay" id="dialog-dial-out" toggle>
+    <form class="overlay-content brand-secondary" name="addParticipantForm" ng-submit="addParticipantForm.$valid && connection.participantAdd(uri, protocol, role, presentationUri) || hide()">
+        <div class="dialog-title" translate>IDS_PARTICIPANT_ADD</div>
+        <div class="dialog-content">
+          <table>
+            <tr>
+              <td>
+                <select style="width: auto" ng-model="protocol" ng-options="value as name for (name, value) in applicationSettings.dialOutProtocols"></select>
+              </td>
+              <td>
+                <input required type="text" maxlength="512" size="30" style="width: auto" focus-input ng-attr-placeholder="{{'IDS_PARTICIPANT_ADD_TEXT' | translate}}" ng-model="uri" ng-change="checkProtocolChange(uri)" />
+              </td>
+              <td>
+                <select style="width: auto" ng-model="role" ng-init="role = applicationSettings.defaultDialOutRole" ng-options="value as (name | translate) for (value, name) in {guest: 'IDS_ROLE_GUEST', host: 'IDS_ROLE_HOST'}"></select>
+              </td>
+            </tr>
+            <tr ng-show="protocol == 'rtmp'">
+              <td>
+                <label><span translate>IDS_PARTICIPANT_ADD_SEPARATE_PRESENTATION</span><input ng-model="separatePresentation" type="checkbox" /></label>
+              </td>
+              <td>
+                <input ng-show="separatePresentation" type="text" maxlength="512" size="30" style="width:auto" ng-attr-placeholder="{{'IDS_PARTICIPANT_ADD_PRESENTATION_TEXT' | translate}}" ng-model="presentationUri" />
+              </td>
+              <td></td>
+            </tr>
+          </table>
+            <p class="placeholder-text" style="max-width: 500px" translate="IDS_PARTICIPANT_ADD_{{protocol}}"></p>
+        </div>
+        <div class="alert-actions">
+            <button type="button" class="button square" ng-click="hide()">
+                <span translate>IDS_BUTTON_CANCEL</span>
+            </button>
+            <button type="submit" class="button square">
+                <span translate>IDS_BUTTON_OK</span>
+            </button>
+        </div>
+    </form>
+</div>

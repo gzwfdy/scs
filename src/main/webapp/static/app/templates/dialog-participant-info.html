@@ -1,0 +1,93 @@
+<div class="overlay-container brand-overlay" id="dialog-participant-info" toggle initial="false" ng-click="hide()">
+    <div class="overlay-content brand-secondary" ng-click="$event.stopPropagation()" ng-init="showKeypad=false">
+        <div style="text-align:center">
+            <div>
+                <img style="border-radius: 50%; width: 100px; height: 100px" ng-src="{{currentParticipant.getAvatarUrl(100, 100)}}" onerror="this.src='img/avatar.svg'" />
+            </div>
+            <div>
+                <div class="dialog-title">{{currentParticipant.displayName}}</div>
+                <div class="placeholder-text">{{currentParticipant.uri}}</div>
+            </div>
+        </div>
+        <div class="dialog-content">
+            <table style="width: 100%" ng-if="!showKeypad">
+                <tr>
+                    <td>
+                        <label translate>IDS_PARTICIPANT_ROLE</label>
+                    </td>
+                    <td>
+                        <span translate="IDS_PARTICIPANT_ROLE_{{currentParticipant.role}}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label translate>IDS_PARTICIPANT_CONNECTION_DURATION</label>
+                    </td>
+                    <td>
+                        <span title="{{currentParticipant.startTime | date:'medium'}}">{{currentParticipant.startTime | date:'HH:mm:ss'}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label translate>IDS_PARTICIPANT_PRESENTING</label>
+                    </td>
+                    <td>
+                        <span translate>{{currentParticipant.isPresenting | boolToHuman}}</span>
+                    </td>
+                </tr>
+                <tr ng-if="currentParticipant.isStreaming">
+                    <td>
+                        <label translate>IDS_PARTICIPANT_STREAMING</label>
+                    </td>
+                    <td>
+                        <span translate>{{currentParticipant.isStreaming | boolToHuman}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label translate>IDS_PARTICIPANT_OVERLAY_TEXT</label>
+                    </td>
+                    <td>
+                        {{currentParticipant.overlayText}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label translate>IDS_PARTICIPANT_PROTOCOL</label>
+                    </td>
+                    <td>
+                        <div title="{{currentParticipant.vendor}}" style="text-transform: uppercase">{{currentParticipant.protocol}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="mute_participant" translate>IDS_PARTICIPANT_MUTED</label>
+                    </td>
+                    <td>
+                        <input id="mute_participant" type="checkbox" ng-disabled="!connection.data.isChair" ng-model="currentParticipant.isMuted" ng-change="call.participantSetMute(currentParticipant, currentParticipant.isMuted)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deny_presentation" translate>IDS_PARTICIPANT_RX_PRESENTATION</label>
+                    </td>
+                    <td>
+                        <input id="deny_presentation" type="checkbox" ng-disabled="!connection.data.isChair" ng-model="currentParticipant.isRxPresentation" ng-change="call.participantSetRxPresentation(currentParticipant, currentParticipant.isRxPresentation)" />
+                    </td>
+                </tr>
+            </table>
+            <div ng-if="showKeypad" style="text-align: center;" ng-include="'templates/dialpad.html'"></div>
+        </div>
+        <div class="alert-actions">
+            <a class="button square" ng-if="connection.data.isChair && currentParticipant.hasMedia" href="" ng-click="$parent.showKeypad = !$parent.showKeypad">
+                <span translate>IDS_DIALPAD</span>
+            </a>
+            <a class="button square sel-participant-disconnect" href="" ng-click="hide(); connection.participantDisconnect(currentParticipant)" ng-if="connection.data.isChair">
+                <span translate>IDS_PARTICIPANT_DISCONNECT</span>
+            </a>
+            <button type="button" class="button square sel-escalate-video-close" ng-click="hide()">
+                <span translate>IDS_BUTTON_CLOSE</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<form name="loginForm" ng-submit="loginForm.$valid && login(params.conference, params.name, params.pin, undefined, params.extension)">
+    <div class="brand-logo" ng-if="!platformSettings.isDesktopClient"></div>
+    <!-- <div class="dialog-title"></div> -->
+    <div class="red login-error sel-error-message" ng-if="errorMessage" translate="{{errorMessage}}" translate-values="{alias: localStorage.conference}"></div>
+    <div class="dialog-content" ng-if="loadingConference">
+        <div class="placeholder-text" style="margin: 10px">
+            <img src="img/spinner-black.svg" class="spinner" />
+        </div>
+    </div>
+    <div class="dialog-content" ng-if="!loadingConference">
+      <fieldset ng-show="!extensionRequested && !pinRequested && !platformSettings.isDesktopClient" style="display: none">
+        <legend translate>IDS_CONNECT_JOIN_PROMPT</legend>
+        <button type="button" class="sel-connect-recent-calls square button" style="float:right; padding: 4px 8px; margin: 9px 4px;" title="{{'IDS_HISTORY_RECENT' | translate}}" ng-click="toggle('dialog-call-history')" ng-show="!pinRequested">
+          <!-- <span translate>IDS_HISTORY_RECENT</span> -->
+          <i class="mdi-history"></i>
+        </button>
+        <div style="overflow: hidden;display: none">
+          <input value="700147" type="text" required maxlength="512" focus-input ng-attr-placeholder="{{'IDS_CONNECT_URI_PROMPT' | translate}}" ng-model="params.conference" class="sel-connect-uri-prompt" />
+        </div>
+      </fieldset>
+      <fieldset ng-show="!extensionRequested && !pinRequested && !platformSettings.isDesktopClient">
+        <legend translate>IDS_SETTINGS_DISPLAY_NAME</legend>
+        <input type="text" required maxlength="512" class="sel-settings-display-name" ng-attr-placeholder="{{'IDS_SETTINGS_DISPLAY_NAME_PLACEHOLDER' | translate}}" ng-model="params.name" />
+      </fieldset>
+      <fieldset ng-if="pinRequested.role">
+        <legend translate>IDS_CONNECT_ROLE_PROMPT</legend>
+        <input class="sel-connect-role-host" required type="radio" name="role" value="host" ng-model="pinRequested.role" />
+        <label for="role-host" translate>IDS_ROLE_HOST</label>
+        <input class="sel-connect-role-guest" required type="radio" name="role" value="guest" ng-model="pinRequested.role" ng-change="params.pin = ''" />
+        <label for="role-guest" translate>IDS_ROLE_GUEST</label>
+      </fieldset>
+      <!--<fieldset ng-if="pinRequested.required || pinRequested.role === 'host'">
+        <legend translate>IDS_CONNECT_PIN_LABEL</legend>
+        <input required type="password" focus-input ng-attr-placeholder="{{'IDS_CONNECT_PIN_PROMPT' | translate}}" ng-model="params.pin" class="sel-connect-pin" />
+      </fieldset>-->
+        <fieldset style="display: none">
+        <legend translate>IDS_CONNECT_PIN_LABEL</legend>
+        <input required type="password" value="572153" focus-input ng-attr-placeholder="{{'IDS_CONNECT_PIN_PROMPT' | translate}}" ng-model="params.pin" class="sel-connect-pin" />
+      </fieldset>
+      <fieldset ng-if="extensionRequested.required">
+        <legend translate>{{'IDS_CONNECT_EXTENSION_LABEL_' + extensionRequested.required}}</legend>
+        <input required type="text" focus-input ng-attr-placeholder="{{'IDS_CONNECT_EXTENSION_PROMPT_' + extensionRequested.required | translate}}" ng-model="params.extension" class="sel-connect-extension" />
+      </fieldset>
+    </div>
+
+    <div class="alert-actions" style="text-align: center" ng-if="!platformSettings.isDesktopClient">
+      <button type="button" class="sel-connect-settings square transparent button" style="border: 1px solid" ng-attr-title="{{'IDS_SETTINGS_TITLE' | translate}}" ng-click="globalService.openSettings()" ng-show="!pinRequested && !loadingConference">
+        <!-- <i class="mdi-settings"></i> -->
+        <span translate>IDS_SETTINGS_TITLE</span>
+      </button>
+      <button type="button" class="button square sel-pin-cancel" ng-click="cancelLogin()" ng-show="pinRequested || loadingConference">
+        <span translate>IDS_BUTTON_CANCEL</span>
+      </button>
+      <button type="submit" class="button square sel-connect-connect sel-pin-ok" ng-show="!loadingConference">
+        <span translate>IDS_BUTTON_CONNECT</span>
+      </button>
+    </div>
+
+    <div class="alert-actions" style="text-align: center" ng-if="platformSettings.isDesktopClient">
+      <button type="button" class="button square sel-pin-cancel" ng-click="cancelLogin()" ng-show="pinRequested || loadingConference">
+        <span translate>IDS_BUTTON_CANCEL</span>
+      </button>
+      <button type="button" class="button square sel-pin-cancel" ng-click="cancelLogin()" ng-show="errorMessage && !pinRequested">
+        <span translate>IDS_BUTTON_CLOSE</span>
+      </button>
+      <button type="submit" class="button square sel-connect-connect sel-pin-ok" ng-show="pinRequested">
+        <span translate>IDS_BUTTON_CONNECT</span>
+      </button>
+    </div>
+</form>

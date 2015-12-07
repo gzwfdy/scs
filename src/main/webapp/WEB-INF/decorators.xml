@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/views">
+	
+	<!-- 默认装饰页面, 在需要装饰的页面增加<meta name="decorator" content="default"/> -->
+	<decorator name="blank" page="layouts/blank.jsp" />
+	<decorator name="default" page="layouts/default.jsp" />
+	
+	<!-- CMS基础主题装饰页面 -->
+	<decorator name="cms_default_basic" page="modules/cms/front/themes/basic/layouts/default.jsp" />
+	<decorator name="cms_default_weixin" page="modules/cms/front/themes/weixin/layouts/default.jsp" />
+
+	<!-- meetime装饰页面/> -->
+	<decorator name="meetimeblank" page="meetime/layouts/blank.jsp" />
+	<decorator name="meetimedefault" page="meetime/layouts/default.jsp" />
+	<decorator name="meetimelogin" page="meetime/layouts/login.jsp" />
+
+	<!-- zone -->
+	<decorator name="zoneIndex" page="modules/zone/themes/basic/layouts/index.jsp" />
+	<decorator name="zoneDefault" page="modules/zone/themes/basic/layouts/default.jsp" />
+	<!-- zone mobile -->
+	<decorator name="zoneMobileIndex" page="mobile/modules/zone/themes/basic/layouts/index.jsp" />
+	<decorator name="zoneMobileDefault" page="mobile/modules/zone/themes/basic/layouts/default.jsp" />
+
+</decorators>

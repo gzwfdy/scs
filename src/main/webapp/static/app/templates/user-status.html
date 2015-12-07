@@ -1,0 +1,19 @@
+<div class="menu">
+    <a class="sel-settings button" href="" title="{{'IDS_SETTINGS_TITLE' | translate}}" ng-click="toggle.settings = true"><i class="mdi-settings"></i></a>
+</div>
+<div class="avatar" ng-if="localStorage.userConfig.userName">
+    <!-- <img src="img/ic_person_24px.png" /> -->
+    <div avatar name="{{localStorage.userConfig.userName}}"></div>
+    <div class="badge-container">
+        <div class="badge green" ng-if="personalVmrService.isConnected()">
+            <i class="mdi-notifications"></i>
+        </div>
+        <div class="badge gray" ng-if="!personalVmrService.isConnected()">
+            <i class="mdi-notifications-off"></i>
+        </div>
+    </div>
+</div>
+<div class="name" ng-if="localStorage.userConfig.userName">
+    {{localStorage.userConfig.userName}}
+</div>
+<div class="clearfix"></div>

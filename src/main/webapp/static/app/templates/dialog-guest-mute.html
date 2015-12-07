@@ -1,0 +1,25 @@
+<div class="overlay-container brand-overlay" id="dialog-guest-mute" toggle initial="false" ng-click="hide()">
+    <div class="overlay-content brand-secondary" ng-click="$event.stopPropagation()">
+        <div class="dialog-title">
+            <span translate>IDS_CONFERENCE_MUTE_GUESTS</span>
+        </div>
+        <div class="dialog-content">
+            <p translate>IDS_CONFERENCE_MUTE_GUESTS_EXPLANATION</p>
+            <ul>
+                <li ng-repeat="participant in guestParticipants = (connection.participants | values | filter:{role:'guest'})" ng-if="$index<5">
+                    <span ng-if="$index < 2">{{participant.displayName || participant.uri}}</span>
+                    <span ng-if="$index == 5">{{'IDS_CONFERENCE_MUTE_N_MORE' | translate:{n: guestParticipants.length - 5} }}</span>
+                </li>
+                <li ng-hide="guestParticipants.length" translate>IDS_CONFERENCE_NO_PARTICIPANTS_TO_MUTE</li>
+            </ul>
+        </div>
+        <div class="alert-actions">
+            <button type="button" class="button square sel-escalate-video-close" ng-click="hide()">
+                <span translate>IDS_BUTTON_CLOSE</span>
+            </button>
+            <button type="button" class="button square" ng-click="call.toggleMuteAllGuests(); hide()">
+                <span translate>IDS_CONFERENCE_MUTE_GUESTS</span>
+            </button>
+        </div>
+    </div>
+</div>

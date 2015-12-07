@@ -1,0 +1,89 @@
+<div class="overlay-container brand-overlay sel-dialog-escalate" id="dialog-escalate" toggle>
+    <form class="overlay-content brand-secondary" ng-submit="startVideoCall(); hide()" ng-init="flashPreviewId = 'flash-preview-video'" ng-controller="userMediaPreview">
+        <div class="dialog-title" translate>IDS_ESCALATE_PROMPT</div>
+        <div class="dialog-content">
+            <div class="placeholder-text" ng-hide="mediaSources.audio || mediaSources.video">
+                <div><img src="img/spinner-black.svg" class="spinner" /></div>
+                <span translate>IDS_ESCALATE_REQUESTING_ACCESS</span>
+            </div>
+            <div class="red login-error" ng-if="getUserMediaError" translate>
+                IDS_ESCALATE_ACCESS_ERROR
+            </div>
+            <table style="width: 100%" ng-show="!platformSettings.hasWebRTC || mediaSources.audio || mediaSources.video">
+                <tr ng-show="mediaSources.audio">
+                    <td>
+                        <label translate>IDS_SETTINGS_MICROPHONE</label>
+                    </td>
+                </tr>
+                <tr ng-show="mediaSources.audio">
+                    <td>
+                        <select class="sel-escalate-microphone" ng-model="localStorage.microphoneSourceId" ng-options="source.id as (source.label | translate) for source in mediaSources.audio" ng-change="previewUserMedia()">
+                            <option value="" translate>IDS_SETTINGS_MICROPHONE_DEFAULT</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr ng-show="mediaSources.audio">
+                    <td class="audio-preview" style="background-color: lightgrey">
+                        <div class="blue audio-preview" ng-style="{ width: microphoneVolume+'%' }">
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-if="localStorage.defaultBandwidth && mediaSources.video">
+                    <td>
+                        <label translate>IDS_SETTINGS_CAMERA</label>
+                    </td>
+                </tr>
+                <tr ng-if="localStorage.defaultBandwidth" ng-show="mediaSources.video">
+                    <td>
+                        <select class="sel-escalate-camera" ng-model="localStorage.cameraSourceId" ng-options="source.id as (source.label | translate) for source in mediaSources.video" ng-change="previewUserMedia()">
+                            <option value="" translate>IDS_SETTINGS_CAMERA_DEFAULT</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr ng-if="platformSettings.hasWebRTC && localStorage.cameraSourceId !== false && localStorage.defaultBandwidth && mediaSources.video.length">
+                    <td style="text-align: center;">
+                        <div class="video-preview">
+                            <video muted autoplay ng-src="{{localMediaStreamURL}}" ng-if="platformSettings.hasWebRTC" />
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-if="!platformSettings.hasWebRTC">
+                    <td style="text-align: center;">
+                        <div class="video-preview">
+                            <div id="flash-preview-placeholder"></div>
+                            <div swf-object flash-id="flash-preview-video" replace-id="flash-preview-placeholder" ref-id="/static/webrtc/flash/PexVideo.swf" width="100%" height="100%"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-if="localStorage.cameraSourceId !== false">
+                    <td>
+                        <label translate>IDS_BANDWIDTH</label>
+                    </td>
+                </tr>
+                <tr ng-if="localStorage.cameraSourceId !== false">
+                    <td>
+                        <select class="sel-escalate-bandwidth" ng-model="localStorage.defaultBandwidth" ng-options="b.value as (b.name | translate:{bandwidth: b.value}) for b in applicationSettings.bandwidths">
+                            <!-- <option value="" translate ng-if="platformSettings.hasWebRTC">IDS_BANDWIDTH_AUDIO_ONLY</option> -->
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr> -->
+                <!--     <td> -->
+                <!--         <label> -->
+                <!--             <input type="checkbox" ng-model="localStorage.startMedia" /> -->
+                <!--             <span translate>IDS_SETTINGS_START_MEDIA</span> -->
+                <!--         </label> -->
+                <!--     </td> -->
+                <!-- </tr> -->
+            </table>
+        </div>
+        <div class="alert-actions">
+            <button type="button" class="button square sel-escalate-video-close" ng-click="hide()">
+                <span translate>IDS_BUTTON_CANCEL</span>
+            </button>
+            <button type="submit" class="button square sel-escalate-start" ng-show="mediaSources.audio || mediaSources.video">
+                <span translate>IDS_ESCALATE_BUTTON_START</span>
+            </button>
+        </div>
+    </form>
+</div>

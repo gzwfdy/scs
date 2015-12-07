@@ -1,0 +1,55 @@
+<div class="side-bar-list-item brand-tertiary brand-tertiary-hover sel-participant-list-item" ng-repeat="participant in connection.participants | values | filter: {displayName: search} | orderBy:['-startTime']" ng-click="showParticipant(participant);">
+    <div class="menu" ng-show="connection.data.isChair && !connection.data.isGateway" ng-click="$event.stopPropagation();">
+        <span class="sel-participant-toggle-mute" ng-click="connection.participantToggleMute(participant)" ng-show="participant.isConnected">
+            <a title="{{'IDS_PARTICIPANT_MUTE' | translate:{displayName: participant.displayName} }}" class="transparent button sel-participant-mute" href="" ng-show="!participant.isMuted">
+                <i class="mdi-mic"></i>
+            </a>
+            <a title="{{ 'IDS_PARTICIPANT_UNMUTE' | translate:{displayName: participant.displayName} }}" class="transparent button sel-participant-mute" href="" ng-show="participant.isMuted">
+                <i class="mdi-moff"></i>
+            </a>
+        </span>
+        <span ng-if="participant.isWaiting">
+            <a title="{{ 'IDS_PARTICIPANT_DISCONNECT' | translate:{displayName: participant.displayName} }}" class="red button sel-participant-disconnect" href="" ng-click="connection.participantDisconnect(participant)">
+                <i class="mdi-call-end"></i>
+            </a>
+        </span>
+        <span ng-show="participant.isWaiting" ng-click="connection.participantUnlock(participant)">
+            <a title="{{ 'IDS_PARTICIPANT_UNLOCK' | translate:{displayName: participant.displayName} }}" class="green button" href="">
+                <i class="mdi-call"></i>
+            </a>
+        </span>
+    </div>
+    <div class="avatar">
+        <!-- <div avatar name="{{participant.displayName}}"></div> -->
+        <img ng-src="{{participant.avatarUrl}}" onerror="this.style.display='none'" />
+        <div class="badge-container">
+            <!-- <div class="badge gray sel-participant-connecting" title="{{'IDS_PARTICIPANT_BADGE_SELF' | translate}}" ng-if="participant.isSelf">
+                <i class="mdi-account-circle"></i>
+            </div> -->
+            <div class="badge green sel-participant-connecting" title="{{'IDS_PARTICIPANT_BADGE_CONNECTING' | translate}}" ng-if="participant.isConnecting">
+                <i class="mdi-ring-volume"></i>
+            </div>
+            <div class="badge blue sel-participant-presenting" title="{{'IDS_PARTICIPANT_BADGE_PRESENTING' | translate}}" ng-if="participant.isPresenting">
+                <i class="mdi-ondemand-video"></i>
+            </div>
+            <div class="badge red sel-participant-muted" title="{{'IDS_PARTICIPANT_BADGE_MUTED' | translate}}" ng-if="participant.isMuted">
+                <i class="mdi-moff"></i>
+            </div>
+            <div class="badge red sel-participant-waiting" title="{{'IDS_PARTICIPANT_BADGE_WAITING' | translate}}" ng-if="participant.isWaiting">
+                <i class="mdi-pause"></i>
+            </div>
+            <div class="badge red" title="{{'IDS_PARTICIPANT_BADGE_STREAMING' | translate}}" ng-if="participant.isStreaming">
+                <i class="mdi-cloud-upload"></i>
+            </div>
+            <div class="badge blue" title="{{'IDS_PARTICIPANT_BADGE_SPEAKING' | translate}}" ng-if="participant.vad == 100">
+                <i class="mdi-volume-up"></i>
+            </div>
+        </div>
+    </div>
+    <div class="participant-list-name sel-participant-name" title="{{participant.displayName}} ({{participant.uri}})">
+        {{participant.displayName}}
+    </div>
+    <div class="participant-list-name-detail" title="{{participant.displayName}} ({{participant.uri}})" translate="IDS_PARTICIPANT_ROLE_{{participant.role}}">
+    </div>
+    <div class="clearfix"></div>
+</div>

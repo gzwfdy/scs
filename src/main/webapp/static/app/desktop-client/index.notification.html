@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="no-js" id="ng-app" lang="en" ng-app="pexapp" ng-controller="NotificationController">
+
+<head>
+    <base href="../">
+
+    <link href="configuration/favicon.png" rel="icon" type="image/x-icon" />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="fonts/mdi/style.css">
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/stage.css" rel="stylesheet" />
+    <link href="css/app-bar.css" rel="stylesheet" />
+    <link href="css/side-bar.css" rel="stylesheet" />
+    <link href="css/toast.css" rel="stylesheet" />
+    <link href="css/mediastats.css" rel="stylesheet" />
+    <link href="css/dialpad.css" rel="stylesheet" />
+    <link href="css/chat.css" rel="stylesheet" />
+    <link href="css/login.css" rel="stylesheet" />
+    <link href="css/escalate-media.css" rel="stylesheet" />
+    <link href="css/file-share.css" rel="stylesheet" />
+    <link ng-href="themes/default/brand.css" rel="stylesheet" />
+    <link ng-href="{{localStorage.theme}}/brand.css" rel="stylesheet" />
+
+    <script src="js/vendor/angular.js"></script>
+
+    <script src="js/vendor/angular-translate.js"></script>
+    <script src="js/vendor/angular-translate-loader-static-files.js"></script>
+
+    <script src="js/vendor/bindonce.js"></script>
+
+    <script src="js/vendor/ngStorage.min.js"></script>
+
+    <script src="js/vendor/angular-sanitize.min.js"></script>
+    <script src="js/vendor/angular-enhance-text.min.js"></script>
+
+    <script src="js/regpwd.js"></script>
+
+    <script src="js/pexapp.js"></script>
+    <script src="configuration/settings.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/call-history-service.js"></script>
+
+    <script src="desktop-client/contextmenu.js"></script>
+
+    <script>
+        angular.module('pexapp')
+
+        .factory('globalService', function() {
+            return global;
+        })
+
+        .controller('NotificationController', function($scope, globalService) {
+            $scope.globalService = globalService;
+
+            $scope.getParticipantAvatarUrl = function(host, alias, token, uuid, width, height) {
+                return 'https://' + host +
+                    '/api/client/v2/conferences/' + alias +
+                    '/participants/' + uuid +
+                    '/avatar.jpg?width=' + width +
+                    '&height=' + height +
+                    '&token=' + token;
+            };
+
+            $scope.getConferenceAvatarUrl = function(host, alias) {
+                return 'https://' + host + '/api/client/v1/conferences/' + alias + '/avatar.jpg';
+            };
+
+            window.addEventListener('message', function(event) {
+                // {
+                //     "service_type": "conference",
+                //     "token": "b3duZXI9MTAuNDcuMi40MyZ0b2tlbl91dWlkPTA4Mzg2NzllLTQ2ZTYtNDdhZS1hOGIxLWIxOGYzZGJhYTliMCZyb2xlPUhPU1QmbmFtZT1tZWV0LmdlaXImdGltZXN0YW1wPTE0MzIyOTI1MzMuODc6ZWNjOWU5MGYxNDVmZGJkZjQ0MGM5ZTZiNWVmOWFkOWM1MDJmOWE2OTNkMzRhMjgwYmU3NDQyMDQ2MDlhN2M1Ng%3D%3D",
+                //     "remote_alias": "meet.geir",
+                //     "remote_display_name": "meet.geir",
+                //     "conference_alias": "meet.geir",
+                //     "roster": [{
+                //         "protocol": "api",
+                //         "disconnect_if_answered_elsewhere": null,
+                //         "is_muted": "NO",
+                //         "is_presenting": "NO",
+                //         "start_time": 1432292431,
+                //         "is_streaming_conference": false,
+                //         "has_media": false,
+                //         "vendor": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.65 Safari/537.36",
+                //         "display_name": "Geir",
+                //         "uuid": "8555228a-dd4f-44b1-8996-2b0c147593f0",
+                //         "can_keep_conference_alive": true,
+                //         "uri": "Infinity_Connect_10.47.4.125",
+                //         "vad": 0,
+                //         "spotlight": 0,
+                //         "rx_presentation_policy": "ALLOW",
+                //         "stage_index": -1,
+                //         "role": "chair",
+                //         "service_type": "conference",
+                //         "presentation_supported": "NO",
+                //         "overlay_text": "Geir"
+                //     }]
+                // }
+
+                // {
+                //     "service_type": "gateway",
+                //     "token": "b3duZXI9MTAuNDcuMi40MyZ0b2tlbl91dWlkPTYyNGUxNDU4LTM4OTUtNDZkYi05MjY2LTczNjQxYjJmMDE1ZiZyb2xlPUdVRVNUJm5hbWU9UmVnaXN0cmF0aW9uKyUyQitWQ1MlM0E4ZjkwNzk5NS1mYzcyLTQyZmEtYmMxZC1iOGUzZDYzMjA3MjEmdGltZXN0YW1wPTE0MzIyOTI3NzguMzM6NGI0Mzc1Mzc4ODkzNWRjMDExNTljMzZkMDIxMWViMmRhZjcwNmJmNzYxNGNhNDdkYTU1YjgyMzA4NjQ0MDBjYg%3D%3D",
+                //     "remote_alias": "sip:geir@pexip.com",
+                //     "remote_display_name": "Geir (E20)",
+                //     "conference_alias": "sip:geir@pexip.com"
+                // }
+
+                console.log("GOT MESSAGE", event)
+                $scope.$apply(function() {
+                    $scope.message = event.data.message;
+                    $scope.host = event.data.host;
+                });
+            })
+        })
+    </script>
+
+    <style>
+        body {
+            -webkit-user-select: none;
+            cursor: default;
+            width: 100%;
+            height: 100%;
+        }
+
+        .incoming-conference-avatar {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 24px;
+            float: left;
+            margin-right: 8px;
+        }
+
+        .incoming-participant-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div ng-switch="message.service_type" style="margin: 8px">
+        <div style="float: right">
+            <!-- <button type="button" class="square button" ng-click="globalService.callReject(message)" translate>IDS_BUTTON_REJECT</button> -->
+            <!-- <button type="button" class="square button" ng-click="globalService.callIgnore()" translate>IDS_BUTTON_IGNORE</button> -->
+            <!-- <button type="button" class="square button" ng-click="globalService.callAccept(message)" translate>IDS_BUTTON_ACCEPT</button> -->
+            <a href="" class="red button" title="{{'IDS_BUTTON_DENY' | translate}}" ng-click="globalService.callReject(message)"><i class="mdi-call-end"></i></a>
+            <a href="" class="green button" title="{{'IDS_BUTTON_ACCEPT' | translate}}" ng-click="globalService.callAccept(message)"><i class="mdi-call"></i></a>
+        </div>
+        <div ng-switch-default>
+            <div class="green incoming-conference-avatar">
+                <i class="mdi-ring-volume"></i>
+            </div>
+            <div class="name">{{message.remote_display_name || message.remote_alias}}</div>
+        </div>
+        <div ng-switch-when="conference">
+            <!-- <div class="green incoming-conference-avatar">
+                <i class="mdi-ring-volume"></i>
+            </div> -->
+            <img class="incoming-conference-avatar" ng-src="{{applicationSettings.overrideConferenceAvatar || getConferenceAvatarUrl(host, message.conference_alias)}}" onerror="this.style.display='none'" />
+            <div class="name">{{message.conference_alias}}</div>
+            <div class="name" title="{{connection.data.alias}}">
+                {{message.conference_alias}}
+            </div>
+            <div ng-repeat="participant in message.roster">
+                <img class="incoming-participant-avatar" ng-src="{{getParticipantAvatarUrl(host, message.conference_alias, message.token, participant.uuid, 40, 40)}}" onerror="this.src='img/avatar.svg'" />
+                <div>{{participant.display_name || participant.uri}}</div>
+            </div>
+        </div>
+    </div>
+
+    <audio ng-src="{{localStorage.ringtone}}" autoplay loop ng-if="localStorage.ringtone" />
+</body>
+
+</html>

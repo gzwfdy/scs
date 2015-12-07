@@ -1,0 +1,57 @@
+.history-list {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+}
+
+.login-container-error-message {
+    margin: 16px 0;
+    padding: 8px 16px;
+    border-radius: 2px;
+}
+
+.login-footer {
+    text-align: center;
+    text-shadow: 1px 1px 1px black;
+    font-size: smaller;
+    background-color: transparent!important;
+}
+.login-footer a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 16px;
+}
+.login-footer a:link,
+.login-footer a:visited {
+    color: inherit;
+    opacity: .5;
+}
+.login-footer a:hover,
+.login-footer a:active {
+    color: inherit;
+    opacity: 1;
+}
+
+#videoPreview {
+    width: 200px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+#videoPreview #flashvideo {
+    width:200px;
+    display: inline-block;
+    border-radius: 2px;
+    position:static!important;
+}
+
+.brand-logo {
+    text-align: center;
+}
+
+.login-error {
+    border-radius: 2px;
+    padding: 8px;
+}

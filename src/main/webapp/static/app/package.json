@@ -1,0 +1,12 @@
+{
+    "name": "Pexip Infinity Connect",
+    "author": "Pexip AS",
+    "main": "desktop-client/main.html",
+    "version": "2.0.1",
+    "window": {
+        "show": false,
+        "toolbar": false
+    },
+    "user-agent": "%name/REPLACE_VERSION (%osinfo) nwjs/%nwver Chrome/41.0.2272.76",
+    "chromium-args": "--ignore-certificate-errors --allow-file-access-from-files --auth-schemes='digest,ntlm,negotiate,basic'"
+}

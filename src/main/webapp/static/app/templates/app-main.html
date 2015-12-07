@@ -1,0 +1,135 @@
+<table class="full-size app-fullscreen sel-main-dialog">
+    <tr>
+        <td class="brand-primary">
+            <div class="max-width-640">
+                <div style="padding: 16px">
+                    <div class="menu">
+                        <a href="" class="transparent button sel-connect-settings" ng-attr-title="{{'IDS_SETTINGS_TITLE' | translate}}" ng-click="toggle('dialog-settings')">
+                            <!-- <a href="" class="transparent button" ng-attr-title="{{'IDS_SETTINGS_TITLE' | translate}}" ng-click="globalService.openSettings()"> -->
+                            <i class="mdi-settings"></i>
+                        </a>
+                    </div>
+                    <div class="avatar">
+                        <div class="badge-container sel-registration-state" ng-switch="localStorage.registrationState">
+                            <div class="badge green" ng-switch-when="ACTIVE">
+                                <i class="mdi-notifications"></i>
+                            </div>
+                            <div class="badge blue" ng-switch-when="REGISTERING">
+                                <i class="mdi-autorenew"></i>
+                            </div>
+                            <div class="badge blue" ng-switch-when="UNREGISTERING">
+                                <i class="mdi-autorenew"></i>
+                            </div>
+                            <div class="badge red" ng-switch-when="FAILED">
+                                <i class="mdi-notifications-off"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="participant-list-name sel-display-name">
+                        {{localStorage.name}}
+                    </div>
+                    <div class="participant-list-name-detail sel-reg-alias" ng-if="localStorage.registrationState === 'ACTIVE'">
+                        {{localStorage.registrationAlias}}
+                    </div>
+                    <div class="participant-list-name-detail sel-reg-alias" ng-if="localStorage.registrationState !== 'ACTIVE'" translate>
+                        IDS_SETTINGS_REGISTRATION_STATUS_NOT_REGISTERED
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="height: 100%">
+            <form novalidate class="brand-tertiary max-width-640 card" style="height: 100%" ng-submit="params.conference && loginApp(params.conference, localStorage.name)">
+                <table class="full-size">
+                    <!-- <tr>
+                        <td class="box-header" translate>IDS_CONNECT_JOIN_PROMPT</td>
+                    </tr> -->
+                    <tr>
+                        <td>
+                            <div class="content-header brand-tertiary">
+                                <a class="transparent button" style="float: right; margin-right: 16px;" onclick="$('#alias-field').focus();" ng-click="params.conference = ''">
+                                    <i class="mdi-clear" ng-if="params.conference"></i>
+                                    <i class="mdi-edit" ng-if="!params.conference"></i>
+                                    <!-- <i class="mdi-search" ng-if="!params.conference"></i>
+                                    <i class="mdi-call" ng-if="params.conference"></i> -->
+                                </a>
+                                <div style="overflow: hidden; height: 100%;">
+                                    <input type="text" id="alias-field" required maxlength="512" focus-input ng-attr-placeholder="{{'IDS_CONNECT_URI_PROMPT' | translate}}" ng-init="params.conference=''" ng-model="params.conference" class="sel-connect-uri-prompt" style="height: 100%; border: none; margin: 0; padding-left: 16px"
+                                    />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="box-header" translate>IDS_HISTORY_RECENT</td>
+                    </tr> -->
+                    <tr>
+                        <td class="brand-secondary" style="height: 100%; max-width: 0px; /* MAX-WIDTH hack to work around long entries overflowing*/">
+                            <div class="content-box">
+                                <div class="side-bar-list-item brand-tertiary brand-tertiary-hover" ng-click="loginApp(params.conference, localStorage.name)" ng-if="params.conference">
+                                    <div class="transparent button" style="float: left; margin-right: 16px">
+                                        <i class="mdi-call"></i>
+                                    </div>
+                                    <div class="participant-list-name">
+                                        {{params.conference}}
+                                    </div>
+                                    <div class="participant-list-name-detail" translate>
+                                        IDS_HISTORY_NEW_PLACEHOLDER
+                                    </div>
+                                </div>
+
+                                <!-- <div class="brand-tertiary placeholder-text box" style="height: 100%; vertical-align: middle;" ng-if="!params.conference">
+                                    The call history is currently empty.
+                                </div> -->
+                                <div class="side-bar-list-item brand-tertiary" ng-if="!callHistory.values.length && !params.conference">
+                                    <div class="transparent button" style="float: left; margin-right: 16px">
+                                        <i class="mdi-history"></i>
+                                    </div>
+                                    <!-- <i class="mdi-history transparent button" style="float: left"></i> -->
+                                    <div class="name" translate>
+                                        IDS_HISTORY_PLACEHOLDER
+                                    </div>
+                                    <!-- <div class="participant-list-name-detail">
+                                        Call and add to history
+                                    </div> -->
+                                </div>
+
+                                <div class="side-bar-list-item brand-tertiary brand-tertiary-hover" ng-repeat="item in callHistory.values | filter:params.conference | orderBy:'timestamp':true" ng-click="loginApp(item.alias, localStorage.name)">
+                                    <div class="menu" ng-click="$event.stopPropagation()">
+                                        <a class="transparent button" href="" title="{{'IDS_BUTTON_DELETE' | translate}}" ng-click="callHistory.remove(item.alias)">
+                                            <i class="mdi-delete"></i>
+                                        </a>
+                                        <a class="transparent button" href="" onclick="$('#alias-field').focus();" ng-click="params.conference = item.alias">
+                                            <i class="mdi-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div class="avatar">
+                                        <img ng-src="{{applicationSettings.overrideConferenceAvatar || item.avatarUrl}}" onerror="this.style.display='none'" />
+                                        <div class="badge-container">
+                                            <div class="badge green" ng-if="item.status === 'outgoing'">
+                                                <i class="mdi-call-made"></i>
+                                            </div>
+                                            <div class="badge red" ng-if="item.status === 'missed'">
+                                                <i class="mdi-call-missed"></i>
+                                            </div>
+                                            <div class="badge green" ng-if="item.status === 'incoming'">
+                                                <i class="mdi-call-received"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="participant-list-name">
+                                        {{item.alias}}
+                                    </div>
+                                    <div class="participant-list-name-detail">
+                                        {{item.timestamp | date:'medium' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </td>
+    </tr>
+</table>

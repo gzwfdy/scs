@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cms.dao.SiteDao">
+    
+	<sql id="cmsSiteColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.title AS "title",
+		a.logo AS "logo",
+		a.domain AS "domain",
+		a.description AS "description",
+		a.keywords AS "keywords",
+		a.theme AS "theme",
+		a.copyright AS "copyright",
+		a.custom_index_view AS "customIndexView",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.locale AS "locale",
+		a.row1col1 AS "row1col1",
+		(select name from cms_category c where c.id = a.row1col1) as row1col1cn,
+		a.row1col2 AS "row1col2",
+		(select name from cms_category c where c.id = a.row1col2) as row1col2cn,
+		a.row1col3 AS "row1col3",
+		(select name from cms_category c where c.id = a.row1col3) as row1col3cn,
+		a.row2col1 AS "row2col1",
+		(select name from cms_category c where c.id = a.row2col1) as row2col1cn,
+		a.row2col2 AS "row2col2",
+		(select name from cms_category c where c.id = a.row2col2) as row2col2cn,
+		a.row2col3 AS "row2col3",
+		(select name from cms_category c where c.id = a.row2col3) as row2col3cn,
+		a.row3col1 AS "row3col1",
+		(select name from cms_category c where c.id = a.row3col1) as row3col1cn,
+		a.row3col2 AS "row3col2",
+		(select name from cms_category c where c.id = a.row3col2) as row3col2cn,
+		a.row3col3 AS "row3col3",
+		(select name from cms_category c where c.id = a.row3col3) as row3col3cn,
+		a.aol AS "aol",
+		a.download AS "download",
+		(select name from cms_category c where c.id = a.download) as downloadcn,
+		a.email AS "email",
+		a.link AS "link",
+		(select name from cms_category c where c.id = a.link) as linkcn,
+		a.qrcode AS "qrcode",
+		a.qrcodecontents AS "qrcodecontents",
+		a.homead AS "homeAD",
+		(select name from cms_category c where c.id = a.homead) as homeADcn,
+		a.sort AS "sort",
+		b.label AS "localeCN"
+	</sql>
+	
+	<sql id="cmsSiteJoins">
+	</sql>
+    
+	<select id="get" resultType="Site">
+		SELECT 
+			<include refid="cmsSiteColumns"/>
+		FROM cms_site a,sys_dict b
+		<include refid="cmsSiteJoins"/>
+		WHERE a.id = #{id}
+		AND a.locale = b.value AND b.type ='locale'
+		ORDER BY a.sort
+	</select>
+	
+	<select id="findList" resultType="Site">
+		SELECT 
+			<include refid="cmsSiteColumns"/>
+		FROM cms_site a,sys_dict b
+		<include refid="cmsSiteJoins"/>
+		<where>
+			a.del_flag = #{delFlag}
+			AND a.locale = b.value AND b.type ='locale'
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Site">
+		SELECT 
+			<include refid="cmsSiteColumns"/>
+		FROM cms_site a,sys_dict b
+		<include refid="cmsSiteJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.locale = b.value AND b.type ='locale'
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_site(
+			id,
+			name,
+			title,
+			logo,
+			domain,
+			description,
+			keywords,
+			theme,
+			copyright,
+			custom_index_view,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			row1col1,
+			row1col2,
+			row1col3,
+			row2col1,
+			row2col2,
+			row2col3,
+			row3col1,
+			row3col2,
+			row3col3,
+			aol ,
+			download,
+			email,
+			link,
+			qrcode,
+			qrcodecontents,
+			homead,
+			sort
+		) VALUES (
+			#{id},
+			#{name},
+			#{title},
+			#{logo},
+			#{domain},
+			#{description},
+			#{keywords},
+			#{theme},
+			#{copyright},
+			#{customIndexView},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{row1col1},
+			#{row1col2},
+			#{row1col3},
+			#{row2col1},
+			#{row2col2},
+			#{row2col3},
+			#{row3col1},
+			#{row3col2},
+			#{row3col3},
+			#{aol} ,
+			#{download},
+			#{email},
+			#{link},
+			#{qrcode},
+			#{qrcodecontents},
+			#{homeAD},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_site SET 	
+			name = #{name},
+			title = #{title},
+			logo = #{logo},
+			domain = #{domain},
+			description = #{description},
+			keywords = #{keywords},
+			theme = #{theme},
+			copyright = #{copyright},
+			custom_index_view = #{customIndexView},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			del_flag = #{delFlag},
+			row1col1 = #{row1col1},
+			row1col2 = #{row1col2},
+			row1col3 = #{row1col3},
+			row2col1 = #{row2col1},
+			row2col2 = #{row2col2},
+			row2col3 = #{row2col3},
+			row3col1 = #{row3col1},
+			row3col2 = #{row3col2},
+			row3col3 = #{row3col3},
+			aol = #{aol} ,
+			download = #{download},
+			email = #{email},
+			link = #{link},
+			qrcode = #{qrcode},
+			qrcodecontents = #{qrcodecontents},
+			homead = #{homeAD},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_site SET 
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

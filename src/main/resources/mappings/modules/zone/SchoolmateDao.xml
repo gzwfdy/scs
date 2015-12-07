@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asvcloud.zone.dao.SchoolmateDao">
+    
+	<sql id="zoneSchoolmateColumns">
+		a.id AS id,
+		a.firstname AS firstname,
+		a.familyname AS familyname,
+		a.cnname AS cnname,
+		a.birthday AS birthday,
+		(select b.label from sys_dict b where b.value = a.nationality and b.type='country') AS nationalitycn,
+		a.gender AS gender,
+        (select b.label from sys_dict b where b.value = a.gender and b.type='sex') AS gendercn,
+		a.occupations AS occupations,
+		a.workingaddress AS workingaddress,
+		a.zipcode AS zipcode,
+		a.learningtype AS learningtype,
+		a.enrollment AS enrollment,
+		a.graduation AS graduation,
+		a.address AS address,
+		a.tel AS tel,
+		a.email AS email,
+		a.fax AS fax,
+		a.subject AS subject,
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+
+
+	</sql>
+	
+	<sql id="cmsSchoolmateJoins">
+	</sql>
+    
+	<select id="get" resultType="Schoolmate">
+		SELECT 
+			<include refid="zoneSchoolmateColumns"/>
+		FROM zone_schoolmate a
+		<include refid="cmsSchoolmateJoins"/>
+		WHERE a.id = #{id}
+
+		ORDER BY a.create_date DESC
+	</select>
+	
+	<select id="findList" resultType="Schoolmate">
+		SELECT 
+			<include refid="zoneSchoolmateColumns"/>
+		FROM zone_schoolmate a
+		<include refid="cmsSchoolmateJoins"/>
+		<where>
+			a.del_flag = #{delFlag}
+
+			<!--<if test="firstname != null and firstname != ''">
+				AND a.firstname LIKE
+					<if test="dbName == 'oracle'">'%'||#{firstname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{firstname}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{firstname}, '%')</if>
+			</if>-->
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Schoolmate">
+		SELECT 
+			<include refid="zoneSchoolmateColumns"/>
+		FROM cms_site a,sys_dict b
+		<include refid="cmsSchoolmateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.locale = b.value AND b.type ='locale'
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zone_schoolmate
+		(id,
+		firstname,
+		familyname,
+		cnname,
+		birthday,
+		nationality,
+		gender,
+		occupations,
+		workingaddress,
+		zipcode,
+		learningtype,
+		enrollment,
+		graduation,
+		address,
+		tel,
+		email,
+		fax,
+		subject,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag)
+		VALUES
+		(#{id},
+		#{firstname},
+		#{familyname},
+		#{cnname},
+		#{birthday},
+		#{nationality},
+		#{gender},
+		#{occupations},
+		#{workingaddress},
+		#{zipcode},
+		#{learningtype},
+		#{enrollment},
+		#{graduation},
+		#{address},
+		#{tel},
+		#{email},
+		#{fax},
+		#{subject},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+
+	</insert>
+	
+	<update id="update">
+		UPDATE zone_schoolmate
+		SET
+		id = #{id},
+		firstname = #{firstname},
+		familyname = #{familyname},
+		cnname = #{cnname},
+		birthday = #{birthday},
+		nationality = #{nationality},
+		gender = #{gender},
+		occupations = #{occupations},
+		workingaddress = #{workingaddress},
+		zipcode = #{zipcode},
+		learningtype = #{learningtype},
+		enrollment = #{enrollment},
+		graduation = #{graduation},
+		address = #{address},
+		tel = #{tel},
+		email = #{email},
+		fax = #{fax},
+		subject = #{subject},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		del_flag = #{delFlag}
+
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zone_schoolmate SET
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

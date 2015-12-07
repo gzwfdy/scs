@@ -1,0 +1,8 @@
+<div>
+    <div class="virtual-pip" ng-init="part = connection.participants[participant.participant_uuid]" ng-repeat="participant in connection.stage track by participant.participant_uuid">
+        <img src="{{part.avatarUrl}}" onerror="this.src='img/avatar.svg'" />
+        <div class="virtual-pip-name">
+            <div>{{part.displayName}}</div>
+        </div>
+    </div>
+</div>

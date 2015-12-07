@@ -1,0 +1,8 @@
+<svg class="stage-loaded" viewbox="0 0 160 90">
+    <g ng-init="ratio = 160 / connection.stage.length; x = ratio * ($index + .5)" ng-repeat="participant in connection.stage">
+        <circle ng-attr-cx="{{x}}" cy="60%" r="4" fill="#123543" />
+        <text text-anchor="middle" ng-attr-x="{{x}}" y="70%" dy="0.35em" pointer-events="auto" fill="white" font-weight="200" font-size="4">
+            {{connection.participants[participant.participant_uuid].displayName}}
+        </text>
+    </g>
+</svg>
